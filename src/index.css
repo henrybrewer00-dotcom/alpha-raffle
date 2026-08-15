@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --blue: #0000ef;
+  --blue-dark: #0000c4;
+  --blue-deep: #00006b;
+  --gold: #ffb81c;
+  --red: #e31c3d;
+  --teal: #2ee6d6;
+  --sky: #47c4e6;
+  --paper: #f8f8f8;
+  --ink: #2d2d2d;
+  --mute: #7a7a7a;
+  --line: #e4e4e4;
+  --white: #ffffff;
+  color: var(--ink);
+  background: var(--white);
+  font-family: Montserrat, ui-sans-serif, system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #fff;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+input,
+textarea,
+select {
+  border-radius: 4px;
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+a:focus-visible {
+  outline: 2px solid #0000ef;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
