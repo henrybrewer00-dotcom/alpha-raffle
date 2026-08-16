@@ -34,7 +34,6 @@ export default function StudentHall() {
   const [error, setError] = useState<string | null>(null)
   const [amounts, setAmounts] = useState<Record<string, string>>({})
   const [busyId, setBusyId] = useState<string | null>(null)
-  const [drawing, setDrawing] = useState<{ prizeName: string } | null>(null)
   const [win, setWin] = useState<{
     prizeId: string
     prizeName: string
@@ -57,10 +56,6 @@ export default function StudentHall() {
     setPeople(nextPeople)
     setLedger(nextLedger)
     await refreshProfile()
-
-    const drawingPrize = nextPrizes.find((p) => p.status === 'drawing')
-    if (drawingPrize) setDrawing({ prizeName: drawingPrize.name })
-    else if (nextPrizes.every((p) => p.status !== 'drawing')) setDrawing(null)
 
     if (ready.current) {
       const fresh = nextPrizes.find(
@@ -98,11 +93,7 @@ export default function StudentHall() {
 
   useEffect(() => {
     if (!event || !profile) return
-    if (event.kind === 'drawing' && event.prize_name) {
-      setDrawing({ prizeName: event.prize_name })
-    }
     if (event.kind === 'finished' && event.prize_id && event.winner_id) {
-      setDrawing(null)
       setWin({
         prizeId: event.prize_id,
         prizeName: event.prize_name ?? 'Prize',
@@ -133,7 +124,6 @@ export default function StudentHall() {
   if (!profile) return null
 
   const openPrizes = prizes.filter((p) => p.status === 'open')
-  const livePrizes = prizes.filter((p) => p.status === 'locked' || p.status === 'drawing')
   const closedPrizes = prizes.filter((p) => p.status === 'awarded' || p.status === 'closed')
 
   return (
@@ -175,29 +165,7 @@ export default function StudentHall() {
           </div>
         </div>
 
-        {drawing ? (
-          <p className="mt-6 border border-blue bg-paper px-4 py-3 text-sm text-blue">
-            Drawing {drawing.prizeName} now. Watch the spinner.
-          </p>
-        ) : null}
-
         {error ? <p className="mt-6 text-sm text-red-600">{error}</p> : null}
-
-        {livePrizes.length ? (
-          <section className="mt-10">
-            <h2 className="text-lg font-semibold text-ink">Drawing</h2>
-            <ul className="mt-3 space-y-2 text-sm">
-              {livePrizes.map((prize) => (
-                <li key={prize.id} className="flex justify-between border-b border-line py-2">
-                  <span>{prize.name}</span>
-                  <span className="text-blue">
-                    {prize.status === 'drawing' ? 'Spinning' : 'Starting'}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </section>
-        ) : null}
 
         <section className="mt-10">
           <h2 className="text-lg font-semibold text-ink">Open prizes</h2>

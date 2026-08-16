@@ -23,6 +23,7 @@ export async function hallLogin(input: {
       handle: input.passcodeOnly ? 'guide' : parseLoginIdentity(input.handle ?? '').handle,
       password: input.password,
     }),
+    signal: AbortSignal.timeout(12000),
   })
   const payload = (await response.json()) as {
     error?: string

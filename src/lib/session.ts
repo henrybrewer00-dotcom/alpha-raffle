@@ -34,6 +34,7 @@ export async function restoreClient() {
         Authorization: `Bearer ${anonKey}`,
       },
       body: JSON.stringify({ refresh_token: tokens.refreshToken }),
+      signal: AbortSignal.timeout(5000),
     })
     const data = (await response.json()) as {
       accessToken?: string

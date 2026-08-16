@@ -44,7 +44,7 @@ export default function WinnerModal({
             onClick={onClose}
             className={onNext ? 'text-sm text-mute' : 'bg-blue py-3 text-sm font-semibold text-white'}
           >
-            {onNext ? 'Close' : 'OK'}
+            {onNext ? 'Keep this up' : 'OK'}
           </button>
         </div>
       </div>

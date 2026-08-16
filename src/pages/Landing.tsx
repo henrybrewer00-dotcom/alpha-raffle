@@ -4,16 +4,17 @@ import TopBar from '../components/TopBar'
 import { useAuth } from '../lib/auth'
 import { CITY, EMAIL_DOMAIN, SCHOOL } from '../lib/brand'
 
-type Door = 'student' | 'guide' | 'admin'
-
 export default function Landing() {
   const { login, profile } = useAuth()
   const navigate = useNavigate()
-  const [door, setDoor] = useState<Door>('student')
+  const [staff, setStaff] = useState(false)
+  const [staffEmail, setStaffEmail] = useState(false)
   const [handle, setHandle] = useState('')
   const [password, setPassword] = useState('')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  const passcodeOnly = staff && !staffEmail
 
   async function onSubmit(event: FormEvent) {
     event.preventDefault()
@@ -21,9 +22,9 @@ export default function Landing() {
     setError(null)
     try {
       const next = await login({
-        handle: door === 'guide' && !handle.trim() ? 'guide' : handle,
+        handle: passcodeOnly ? 'guide' : handle,
         password,
-        passcodeOnly: door === 'guide' && !handle.trim(),
+        passcodeOnly,
       })
       if (next.role === 'student') navigate('/hall')
       else navigate('/desk')
@@ -40,58 +41,28 @@ export default function Landing() {
       <main className="mx-auto max-w-md px-5 py-16">
         <h1 className="text-3xl font-bold text-ink">Sign in</h1>
         <p className="mt-2 text-sm text-mute">
-          {SCHOOL}, {CITY}. Students sign in with their school email. Guides use
-          the classroom passcode.
+          {SCHOOL}, {CITY}. Use your school email.
         </p>
 
-        <div className="mt-8 flex gap-6 border-b border-line text-sm">
-          {(['student', 'guide', 'admin'] as Door[]).map((key) => (
-            <button
-              key={key}
-              type="button"
-              onClick={() => setDoor(key)}
-              className={`-mb-px border-b-2 pb-2 capitalize ${
-                door === key
-                  ? 'border-blue font-semibold text-blue'
-                  : 'border-transparent text-mute'
-              }`}
-            >
-              {key}
-            </button>
-          ))}
-        </div>
-
         <form className="mt-8 space-y-4" onSubmit={onSubmit}>
-          {door !== 'guide' || handle.length > 0 ? (
+          {passcodeOnly ? null : (
             <label className="block text-sm">
-              <span className="font-medium text-ink">
-                {door === 'guide' ? 'Guide email (optional)' : 'Email'}
-              </span>
+              <span className="font-medium text-ink">Email</span>
               <input
                 value={handle}
                 onChange={(e) => setHandle(e.target.value)}
                 autoComplete="username"
                 placeholder={
-                  door === 'student'
-                    ? `test1@${EMAIL_DOMAIN}`
-                    : `test@${EMAIL_DOMAIN}`
+                  staff ? `test@${EMAIL_DOMAIN}` : `test1@${EMAIL_DOMAIN}`
                 }
                 className="mt-1 w-full border border-line bg-white px-3 py-2.5"
               />
             </label>
-          ) : (
-            <button
-              type="button"
-              className="text-sm text-blue underline"
-              onClick={() => setHandle('guide')}
-            >
-              Sign in with a guide email instead
-            </button>
           )}
 
           <label className="block text-sm">
             <span className="font-medium text-ink">
-              {door === 'guide' && !handle ? 'Passcode' : 'Password'}
+              {passcodeOnly ? 'Passcode' : 'Password'}
             </span>
             <input
               type="password"
@@ -112,6 +83,55 @@ export default function Landing() {
             {busy ? 'Signing in…' : 'Sign in'}
           </button>
         </form>
+
+        <div className="mt-8 text-sm text-mute">
+          {staff ? (
+            <div className="space-y-2">
+              {staffEmail ? (
+                <button
+                  type="button"
+                  className="hover:text-ink"
+                  onClick={() => {
+                    setStaffEmail(false)
+                    setHandle('')
+                  }}
+                >
+                  Use the classroom passcode
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="hover:text-ink"
+                  onClick={() => setStaffEmail(true)}
+                >
+                  Use an email instead
+                </button>
+              )}
+              <div>
+                <button
+                  type="button"
+                  className="hover:text-ink"
+                  onClick={() => {
+                    setStaff(false)
+                    setStaffEmail(false)
+                    setHandle('')
+                    setPassword('')
+                  }}
+                >
+                  Back to student sign in
+                </button>
+              </div>
+            </div>
+          ) : (
+            <button
+              type="button"
+              className="hover:text-ink"
+              onClick={() => setStaff(true)}
+            >
+              If you&apos;re a guide or admin
+            </button>
+          )}
+        </div>
 
         {profile ? (
           <button

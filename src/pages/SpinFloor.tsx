@@ -26,6 +26,7 @@ export default function SpinFloor() {
   const [rotation, setRotation] = useState(0)
   const [spinning, setSpinning] = useState(false)
   const [winner, setWinner] = useState<{ id: string; name: string } | null>(null)
+  const [showWin, setShowWin] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const frame = useRef<number | null>(null)
   const spinningRef = useRef(false)
@@ -47,6 +48,7 @@ export default function SpinFloor() {
     if (!prizeId) return
     setRotation(0)
     setWinner(null)
+    setShowWin(false)
     setSpinning(false)
     spinningRef.current = false
     setError(null)
@@ -107,6 +109,7 @@ export default function SpinFloor() {
       await animateTo(end, reduce ? 400 : 7200)
       await completeDraw(client, prizeId)
       setWinner({ id: result.winner_id, name: result.winner_name })
+      setShowWin(true)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Draw failed')
     } finally {
@@ -119,7 +122,7 @@ export default function SpinFloor() {
     <div className="flex min-h-screen flex-col bg-blue text-white">
       <header className="flex items-center justify-between px-6 py-5 text-sm">
         <Link to="/desk" className="text-white/80">
-          Back
+          Desk
         </Link>
         <Link to="/hall" className="text-white/80">
           Tickets
@@ -137,11 +140,16 @@ export default function SpinFloor() {
         </div>
 
         {spinning || winner ? (
-          <p className="mt-8 min-h-[3rem] text-3xl font-bold">
-            {winner ? winner.name : current?.name ?? ''}
-          </p>
+          <div className="mt-8 min-h-[4.5rem]">
+            <p className="text-3xl font-bold md:text-5xl">
+              {winner ? winner.name : current?.name ?? ''}
+            </p>
+            {winner ? (
+              <p className="mt-2 text-white/80">takes the {prize?.name ?? 'prize'}</p>
+            ) : null}
+          </div>
         ) : (
-          <div className="mt-8 min-h-[3rem]" />
+          <div className="mt-8 min-h-[4.5rem]" />
         )}
 
         {error ? <p className="mt-4 text-sm">{error}</p> : null}
@@ -155,16 +163,32 @@ export default function SpinFloor() {
           >
             {spinning ? 'Spinning…' : 'Spin'}
           </button>
-        ) : null}
+        ) : (
+          <div className="mt-8 flex flex-col items-center gap-3">
+            {nextPrize ? (
+              <button
+                type="button"
+                onClick={() => {
+                  void startPrize(client, nextPrize.id).then(() => navigate(`/spin/${nextPrize.id}`))
+                }}
+                className="bg-white px-10 py-3 text-sm font-semibold text-blue"
+              >
+                Next prize
+              </button>
+            ) : (
+              <p className="text-sm text-white/70">Leave this up. Desk is in the corner when you are done.</p>
+            )}
+          </div>
+        )}
       </main>
 
-      {winner ? (
+      {winner && showWin ? (
         <WinnerModal
           prizeName={prize?.name ?? 'Prize'}
           winnerName={winner.name}
           youWon={false}
-          onClose={() => navigate('/desk')}
-          nextLabel={nextPrize ? `Start ${nextPrize.name}` : undefined}
+          onClose={() => setShowWin(false)}
+          nextLabel={nextPrize ? 'Next prize' : undefined}
           onNext={
             nextPrize
               ? () => {

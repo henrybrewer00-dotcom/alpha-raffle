@@ -145,6 +145,9 @@ export default async function (req: Request): Promise<Response> {
     const userId = String(body.userId ?? '')
     const password = String(body.password ?? '')
     if (!userId || password.length < 4) return json({ error: 'User and password are required' }, 400)
+    if (caller.role === 'guide' && userId !== caller.id) {
+      return json({ error: 'Guides can only change their own password' }, 403)
+    }
 
     const { data: existing } = await admin.database
       .from('login_secrets')

@@ -74,16 +74,6 @@ async function emailForUser(
     if (typeof email === 'string' && email.includes('@')) return email
   }
 
-  const list = await fetch(`${baseUrl}/api/auth/users?limit=200`, {
-    headers: { Authorization: `Bearer ${apiKey}` },
-  })
-  if (list.ok) {
-    const data = await list.json()
-    const users = data.users ?? data.data ?? []
-    const found = users.find((user: { id?: string; email?: string }) => user.id === userId)
-    if (found?.email) return found.email
-  }
-
   if (typedEmail?.includes('@')) return typedEmail
   const domains = [DOMAIN, ...LEGACY_DOMAINS.filter((item) => item !== DOMAIN)]
   return `${handle}@${domains[0]}`

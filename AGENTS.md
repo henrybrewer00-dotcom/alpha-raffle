@@ -33,7 +33,7 @@ Key patterns:
 3. **Live without reload.** `RaffleLiveProvider` ticks every 1s while the tab is visible, plus realtime `raffle:hall`.
 4. **Nothing under the wheel until Spin.** Names live on slices. Winner is a dialog on guide and student screens.
 5. **Page blue is not a slice.** Board is `#0000EF`. First slice is gold (`#FFB81C`). See `docs/STYLE.md`.
-6. **No public signup.** Door is `functions/hall-login.ts`. Passwords live in `login_secrets` (PBKDF2). Auth users hold a random bridge password.
+6. **No public signup.** Door is `functions/hall-login.ts`. Passwords live in `login_secrets` (PBKDF2). Auth users hold a random bridge password. Staff sign-in is behind “If you're a guide or admin”, not its own tab. Guides may change only their own password. Admins may change anyone’s.
 7. **Ledger is append-only.** `ticket_balance` is maintained by triggers. Do not UPDATE balances by hand.
 8. **Do not revive Stub Hall, ticket gimmicks, or a second brand.**
 
@@ -44,7 +44,7 @@ Emails are `{handle}@{EMAIL_DOMAIN}`. Default domain: `alpha.school`. The field 
 | Who | Email | Password |
 |---|---|---|
 | Admin | `test@alpha.school` | `alpha-hall` |
-| Guide | passcode only, or `guide` | `2468` |
+| Guide | passcode, via “If you're a guide or admin” | `2468` |
 | Students | `test1@alpha.school` … `test6@alpha.school` | `alpha` |
 
 Older Alpha High handles (`mia`, `leo`, `admin`) still work. Prefer the `test*` roster in docs and tests.

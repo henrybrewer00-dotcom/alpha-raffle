@@ -14,7 +14,7 @@ function Gate({
   children: ReactNode
 }) {
   const { loading, profile } = useAuth()
-  if (loading) {
+  if (loading && !profile) {
     return (
       <div className="grid min-h-screen place-items-center text-mute">
         Loading…

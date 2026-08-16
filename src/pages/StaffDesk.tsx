@@ -57,6 +57,10 @@ export default function StaffDesk() {
   const [grantAmount, setGrantAmount] = useState('4')
   const [weekdaysOnly, setWeekdaysOnly] = useState(true)
   const [adjustAmounts, setAdjustAmounts] = useState<Record<string, string>>({})
+  const [accountOpen, setAccountOpen] = useState(false)
+  const [ownPassword, setOwnPassword] = useState('')
+  const [ownAgain, setOwnAgain] = useState('')
+  const [staffPasswords, setStaffPasswords] = useState<Record<string, string>>({})
   const grantTouched = useRef(false)
 
   async function reload() {
@@ -160,7 +164,68 @@ export default function StaffDesk() {
         </h1>
         <p className="mt-1 text-sm text-mute">
           {profile.display_name} · {SCHOOL}
+          {' · '}
+          <button
+            type="button"
+            className="hover:text-ink"
+            onClick={() => setAccountOpen((open) => !open)}
+          >
+            If this is you
+          </button>
         </p>
+
+        {accountOpen ? (
+          <form
+            className="mt-4 max-w-md space-y-3 border border-line p-4"
+            onSubmit={(event) => {
+              event.preventDefault()
+              if (ownPassword !== ownAgain) {
+                setError('Those passwords do not match')
+                return
+              }
+              void wrap(async () => {
+                await manageUser(client, {
+                  action: 'password',
+                  userId: profile.id,
+                  password: ownPassword,
+                })
+                setOwnPassword('')
+                setOwnAgain('')
+                setAccountOpen(false)
+              }, 'Your password is updated')
+            }}
+          >
+            <p className="text-sm text-ink">
+              {profile.role === 'guide'
+                ? 'This is yours only. If you use the classroom passcode, this changes that too.'
+                : 'This is your admin password. You can also change anyone else below.'}
+            </p>
+            <input
+              type="password"
+              required
+              minLength={4}
+              placeholder="New password"
+              value={ownPassword}
+              onChange={(e) => setOwnPassword(e.target.value)}
+              className="w-full border border-line px-3 py-2.5"
+            />
+            <input
+              type="password"
+              required
+              minLength={4}
+              placeholder="Again"
+              value={ownAgain}
+              onChange={(e) => setOwnAgain(e.target.value)}
+              className="w-full border border-line px-3 py-2.5"
+            />
+            <button
+              disabled={busy}
+              className="bg-blue px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-60"
+            >
+              Save
+            </button>
+          </form>
+        ) : null}
 
         <nav className="mt-8 flex gap-6 border-b border-line text-sm">
           {TABS.map(({ key, label }) => (
@@ -300,28 +365,98 @@ export default function StaffDesk() {
                       >
                         {student.active ? 'Pause' : 'Unpause'}
                       </button>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const password = window.prompt(`New password for ${student.display_name}`)
-                          if (!password) return
-                          void wrap(
-                            () =>
-                              manageUser(client, {
-                                action: 'password',
-                                userId: student.id,
-                                password,
-                              }),
-                            `Password updated for ${student.display_name}`,
-                          )
-                        }}
-                      >
-                        Reset password
-                      </button>
+                      {profile.role === 'admin' ? (
+                        <button
+                          type="button"
+                          className="text-mute hover:text-ink"
+                          onClick={() => {
+                            const password = window.prompt(`New password for ${student.display_name}`)
+                            if (!password) return
+                            void wrap(
+                              () =>
+                                manageUser(client, {
+                                  action: 'password',
+                                  userId: student.id,
+                                  password,
+                                }),
+                              `Password updated for ${student.display_name}`,
+                            )
+                          }}
+                        >
+                          password
+                        </button>
+                      ) : null}
                     </div>
                   </article>
                 ))}
               </div>
+              {profile.role === 'admin' ? (
+                <div className="mt-10">
+                  <button
+                    type="button"
+                    className="text-sm text-mute hover:text-ink"
+                    onClick={() => setAccountOpen(true)}
+                  >
+                    If you need to change someone else
+                  </button>
+                  {accountOpen ? (
+                    <div className="mt-3 divide-y divide-line border-y border-line">
+                      {people
+                        .filter((person) => person.id !== profile.id && person.role !== 'student')
+                        .map((person) => (
+                          <div
+                            key={person.id}
+                            className="flex flex-wrap items-center justify-between gap-3 py-3"
+                          >
+                            <div>
+                              <div className="text-sm font-medium text-ink">{person.display_name}</div>
+                              <div className="text-sm text-mute">
+                                {person.handle} · {person.role}
+                              </div>
+                            </div>
+                            <form
+                              className="flex gap-2"
+                              onSubmit={(event) => {
+                                event.preventDefault()
+                                const password = staffPasswords[person.id] ?? ''
+                                if (password.length < 4) return
+                                void wrap(async () => {
+                                  await manageUser(client, {
+                                    action: 'password',
+                                    userId: person.id,
+                                    password,
+                                  })
+                                  setStaffPasswords((prev) => ({ ...prev, [person.id]: '' }))
+                                }, `Password updated for ${person.display_name}`)
+                              }}
+                            >
+                              <input
+                                type="password"
+                                minLength={4}
+                                placeholder="New password"
+                                value={staffPasswords[person.id] ?? ''}
+                                onChange={(e) =>
+                                  setStaffPasswords((prev) => ({
+                                    ...prev,
+                                    [person.id]: e.target.value,
+                                  }))
+                                }
+                                className="w-40 border border-line px-2 py-1 text-sm"
+                              />
+                              <button
+                                disabled={busy}
+                                className="text-sm text-mute hover:text-ink disabled:opacity-60"
+                              >
+                                save
+                              </button>
+                            </form>
+                          </div>
+                        ))}
+                    </div>
+                  ) : null}
+                </div>
+              ) : null}
+
               <label className="mt-4 block text-sm text-mute">
                 Note on ticket changes
                 <input

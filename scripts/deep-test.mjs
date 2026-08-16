@@ -15,8 +15,13 @@ function fail(name, detail) {
 
 async function signIn(page, door, identity, password) {
   await page.goto(BASE, { waitUntil: 'networkidle' })
-  await page.getByRole('button', { name: door, exact: true }).click()
-  if (door !== 'guide') {
+  if (door !== 'student') {
+    await page.getByRole('button', { name: /guide or admin/i }).click()
+    if (door === 'admin' || identity) {
+      await page.getByRole('button', { name: /email instead/i }).click()
+      await page.locator('input[autocomplete="username"]').fill(identity)
+    }
+  } else if (identity) {
     await page.locator('input[autocomplete="username"]').fill(identity)
   }
   await page.locator('input[type="password"]').fill(password)
@@ -111,7 +116,7 @@ async function main() {
     await guide.waitForURL(/\/spin\//, { timeout: 15000 })
     pass('Start opens the live board')
 
-    await guide.getByRole('link', { name: 'Back' }).click()
+    await guide.getByRole('link', { name: 'Desk' }).click()
     await guide.waitForURL(/\/desk/, { timeout: 10000 })
     await guide.getByRole('button', { name: 'Draw' }).click()
     await guide.locator('article').filter({ hasText: blockerName }).getByRole('button', { name: 'Start' }).click()
@@ -193,7 +198,10 @@ async function main() {
     pass('second student hall stayed open through the draw')
     await twoCtx.close()
 
-    await guide.getByRole('button', { name: /^(OK|Close)$/ }).click()
+    await guide.getByRole('button', { name: /^(OK|Keep this up)$/ }).click()
+    if (guide.url().includes('/spin/')) pass('board stays up after the winner')
+    else fail('board stays up after the winner', guide.url())
+    await guide.getByRole('link', { name: 'Desk' }).click()
     await guide.waitForURL(/\/desk/, { timeout: 10000 })
     await guide.getByRole('button', { name: 'Prizes' }).click()
     guide.once('dialog', (d) => d.accept())
@@ -225,7 +233,6 @@ async function main() {
 
 async function pageBadLogin(page) {
   await page.goto(BASE, { waitUntil: 'networkidle' })
-  await page.getByRole('button', { name: 'student', exact: true }).click()
   await page.locator('input[autocomplete="username"]').fill('nobody@alpha.school')
   await page.locator('input[type="password"]').fill('nope')
   await page.getByRole('button', { name: 'Sign in', exact: true }).click()
