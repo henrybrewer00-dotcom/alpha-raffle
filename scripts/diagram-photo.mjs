@@ -3,7 +3,7 @@ import { pathToFileURL } from 'node:url'
 import { resolve } from 'node:path'
 
 const html = resolve('docs/diagrams/friday-raffle.html')
-const out = resolve('docs/diagrams/friday-raffle.png')
+const out = resolve('docs/diagrams/system.png')
 const browser = await chromium.launch({ headless: true })
 const page = await browser.newPage({
   viewport: { width: 1600, height: 980 },

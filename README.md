@@ -6,7 +6,7 @@ One prize at a time. Students put tickets in. The pie fills live. Spin, and ever
 
 **Live site:** [ak29gamq.insforge.site](https://ak29gamq.insforge.site)
 
-![System diagram](docs/diagrams/friday-raffle.png)
+![System diagram](docs/diagrams/system.png)
 
 ## Sign in
 
