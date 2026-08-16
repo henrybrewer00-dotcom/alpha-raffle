@@ -1,61 +1,134 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 640" role="img" aria-labelledby="title desc">
-  <title id="title">Friday raffle</title>
-  <desc id="desc">A guide starts one prize. Students put tickets in. The pie fills live. Spin picks a winner on every phone.</desc>
-  <rect width="1120" height="640" fill="#ffffff"/>
-  <text x="56" y="64" font-family="Montserrat, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#0000EF" letter-spacing="2">ALPHA HIGH</text>
-  <text x="56" y="108" font-family="Montserrat, Helvetica, Arial, sans-serif" font-size="36" font-weight="700" fill="#2D2D2D">Friday raffle</text>
-  <text x="56" y="142" font-family="Montserrat, Helvetica, Arial, sans-serif" font-size="16" fill="#7A7A7A">One prize at a time. Tickets in. Spin. Winner on every phone.</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 980" width="1600" height="980" role="img" aria-labelledby="title desc">
+  <title id="title">Alpha Raffle system</title>
+  <desc id="desc">Clients call hall-login and RPCs. Postgres holds tickets and prizes. begin_draw hides the winner until complete_draw. Realtime plus a 1s tick updates the board.</desc>
+  <rect width="1600" height="980" fill="#ffffff"/>
 
-  <g font-family="Montserrat, Helvetica, Arial, sans-serif">
-    <rect x="56" y="188" width="184" height="168" rx="4" fill="#0000EF"/>
-    <text x="76" y="222" font-size="12" font-weight="700" fill="#FFB81C">01</text>
-    <text x="76" y="258" font-size="18" font-weight="700" fill="#ffffff">Start</text>
-    <text x="76" y="286" font-size="13" fill="#ffffff">Guide opens one</text>
-    <text x="76" y="306" font-size="13" fill="#ffffff">draft prize.</text>
+  <text x="48" y="48" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" font-weight="700" fill="#0000EF" letter-spacing="2">ALPHA RAFFLE</text>
+  <text x="48" y="86" font-family="ui-sans-serif, system-ui, sans-serif" font-size="32" font-weight="700" fill="#2D2D2D">System</text>
+  <text x="48" y="116" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" fill="#7A7A7A">Vite SPA → edge functions → Postgres RPCs → raffle:hall</text>
 
-    <path d="M252 272 H276" stroke="#0000EF" stroke-width="2"/>
-    <path d="M268 264 L276 272 L268 280" fill="none" stroke="#0000EF" stroke-width="2"/>
+  <!-- Clients -->
+  <text x="48" y="168" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" font-weight="700" fill="#7A7A7A" letter-spacing="1.6">CLIENTS</text>
+  <rect x="48" y="184" width="280" height="72" fill="#fff" stroke="#2D2D2D" stroke-width="1.5"/>
+  <text x="64" y="214" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" font-weight="700" fill="#2D2D2D">/hall</text>
+  <text x="64" y="236" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" fill="#7A7A7A">student tickets</text>
 
-    <rect x="288" y="188" width="184" height="168" rx="4" fill="#F8F8F8" stroke="#E4E4E4"/>
-    <text x="308" y="222" font-size="12" font-weight="700" fill="#0000EF">02</text>
-    <text x="308" y="258" font-size="18" font-weight="700" fill="#2D2D2D">Enter</text>
-    <text x="308" y="286" font-size="13" fill="#7A7A7A">test1@ and test2@</text>
-    <text x="308" y="306" font-size="13" fill="#7A7A7A">put tickets in.</text>
+  <rect x="352" y="184" width="280" height="72" fill="#fff" stroke="#2D2D2D" stroke-width="1.5"/>
+  <text x="368" y="214" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" font-weight="700" fill="#2D2D2D">/desk</text>
+  <text x="368" y="236" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" fill="#7A7A7A">guide / admin</text>
 
-    <path d="M484 272 H508" stroke="#0000EF" stroke-width="2"/>
-    <path d="M500 264 L508 272 L500 280" fill="none" stroke="#0000EF" stroke-width="2"/>
+  <rect x="656" y="184" width="280" height="72" fill="#0000EF" stroke="#0000EF" stroke-width="1.5"/>
+  <text x="672" y="214" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" font-weight="700" fill="#ffffff">/spin/:id</text>
+  <text x="672" y="236" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" fill="#ffffff">live pie + spin</text>
 
-    <rect x="520" y="188" width="184" height="168" rx="4" fill="#FFB81C"/>
-    <text x="540" y="222" font-size="12" font-weight="700" fill="#0000EF">03</text>
-    <text x="540" y="258" font-size="18" font-weight="700" fill="#2D2D2D">Live pie</text>
-    <text x="540" y="286" font-size="13" fill="#2D2D2D">Board fills in about</text>
-    <text x="540" y="306" font-size="13" fill="#2D2D2D">one second. No reload.</text>
+  <rect x="960" y="184" width="280" height="72" fill="#fff" stroke="#2D2D2D" stroke-width="1.5"/>
+  <text x="976" y="214" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" font-weight="700" fill="#2D2D2D">localStorage</text>
+  <text x="976" y="236" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" fill="#7A7A7A">access + refresh tokens</text>
 
-    <path d="M716 272 H740" stroke="#0000EF" stroke-width="2"/>
-    <path d="M732 264 L740 272 L732 280" fill="none" stroke="#0000EF" stroke-width="2"/>
+  <!-- arrows down to edge -->
+  <line x1="188" y1="256" x2="188" y2="300" stroke="#2D2D2D" stroke-width="1.5"/>
+  <line x1="492" y1="256" x2="492" y2="300" stroke="#2D2D2D" stroke-width="1.5"/>
+  <line x1="796" y1="256" x2="796" y2="300" stroke="#0000EF" stroke-width="1.5"/>
+  <polygon points="184,300 188,310 192,300" fill="#2D2D2D"/>
+  <polygon points="488,300 492,310 496,300" fill="#2D2D2D"/>
+  <polygon points="792,300 796,310 800,300" fill="#0000EF"/>
 
-    <rect x="752" y="188" width="184" height="168" rx="4" fill="#2D2D2D"/>
-    <text x="772" y="222" font-size="12" font-weight="700" fill="#FFB81C">04</text>
-    <text x="772" y="258" font-size="18" font-weight="700" fill="#ffffff">Spin</text>
-    <text x="772" y="286" font-size="13" fill="#ffffff">Winner is picked,</text>
-    <text x="772" y="306" font-size="13" fill="#ffffff">then shown to all.</text>
+  <!-- Edge -->
+  <text x="48" y="340" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" font-weight="700" fill="#7A7A7A" letter-spacing="1.6">EDGE</text>
+  <rect x="48" y="356" width="432" height="88" fill="#F8F8F8" stroke="#2D2D2D" stroke-width="1.5"/>
+  <text x="64" y="386" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" font-weight="700" fill="#2D2D2D">hall-login</text>
+  <text x="64" y="408" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" fill="#7A7A7A">PBKDF2 vs login_secrets → session with bridge</text>
+  <text x="64" y="428" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#7A7A7A">POST /functions/hall-login</text>
+
+  <rect x="504" y="356" width="432" height="88" fill="#F8F8F8" stroke="#2D2D2D" stroke-width="1.5"/>
+  <text x="520" y="386" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" font-weight="700" fill="#2D2D2D">manage-users</text>
+  <text x="520" y="408" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" fill="#7A7A7A">guide: own password · admin: anyone</text>
+  <text x="520" y="428" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#7A7A7A">POST /functions/manage-users</text>
+
+  <rect x="960" y="356" width="432" height="88" fill="#F8F8F8" stroke="#2D2D2D" stroke-width="1.5"/>
+  <text x="976" y="386" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" font-weight="700" fill="#2D2D2D">RPCs</text>
+  <text x="976" y="408" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#2D2D2D">enter_prize  start_prize</text>
+  <text x="976" y="428" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#0000EF">begin_draw  complete_draw</text>
+
+  <line x1="264" y1="444" x2="264" y2="500" stroke="#2D2D2D" stroke-width="1.5"/>
+  <line x1="720" y1="444" x2="720" y2="500" stroke="#2D2D2D" stroke-width="1.5"/>
+  <line x1="1176" y1="444" x2="1176" y2="500" stroke="#0000EF" stroke-width="1.5"/>
+  <polygon points="260,500 264,510 268,500" fill="#2D2D2D"/>
+  <polygon points="716,500 720,510 724,500" fill="#2D2D2D"/>
+  <polygon points="1172,500 1176,510 1180,500" fill="#0000EF"/>
+
+  <!-- Postgres -->
+  <text x="48" y="540" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" font-weight="700" fill="#7A7A7A" letter-spacing="1.6">POSTGRES</text>
+  <rect x="48" y="556" width="1344" height="132" fill="#fff" stroke="#2D2D2D" stroke-width="1.5"/>
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13">
+    <rect x="68" y="580" width="200" height="84" fill="#F8F8F8" stroke="#E4E4E4"/>
+    <text x="80" y="606" font-weight="700" fill="#2D2D2D">profiles</text>
+    <text x="80" y="628" fill="#7A7A7A">role handle</text>
+    <text x="80" y="648" fill="#7A7A7A">ticket_balance</text>
+
+    <rect x="284" y="580" width="200" height="84" fill="#F8F8F8" stroke="#E4E4E4"/>
+    <text x="296" y="606" font-weight="700" fill="#2D2D2D">prizes</text>
+    <text x="296" y="628" fill="#7A7A7A">draft → open</text>
+    <text x="296" y="648" fill="#7A7A7A">→ awarded</text>
+
+    <rect x="500" y="580" width="200" height="84" fill="#F8F8F8" stroke="#E4E4E4"/>
+    <text x="512" y="606" font-weight="700" fill="#2D2D2D">prize_entries</text>
+    <text x="512" y="628" fill="#7A7A7A">tickets / user</text>
+    <text x="512" y="648" fill="#7A7A7A">feeds the pie</text>
+
+    <rect x="716" y="580" width="200" height="84" fill="#F8F8F8" stroke="#E4E4E4"/>
+    <text x="728" y="606" font-weight="700" fill="#2D2D2D">ticket_ledger</text>
+    <text x="728" y="628" fill="#7A7A7A">append-only</text>
+    <text x="728" y="648" fill="#7A7A7A">balance is a view</text>
+
+    <rect x="932" y="580" width="200" height="84" fill="#FFF8E6" stroke="#FFB81C"/>
+    <text x="944" y="606" font-weight="700" fill="#2D2D2D">draw_runs</text>
+    <text x="944" y="628" fill="#2D2D2D">spinning: staff</text>
+    <text x="944" y="648" fill="#2D2D2D">complete: all</text>
+
+    <rect x="1148" y="580" width="220" height="84" fill="#F8F8F8" stroke="#E4E4E4"/>
+    <text x="1160" y="606" font-weight="700" fill="#2D2D2D">login_secrets</text>
+    <text x="1160" y="628" fill="#7A7A7A">pbkdf2 hash</text>
+    <text x="1160" y="648" fill="#7A7A7A">auth bridge</text>
   </g>
 
-  <g font-family="Montserrat, Helvetica, Arial, sans-serif">
-    <text x="56" y="412" font-size="13" font-weight="700" fill="#0000EF" letter-spacing="1.4">WHAT NEVER CHANGES</text>
-    <rect x="56" y="432" width="312" height="72" rx="4" fill="#F8F8F8"/>
-    <text x="76" y="462" font-size="15" font-weight="600" fill="#2D2D2D">Prizes stay draft until Start</text>
-    <text x="76" y="484" font-size="13" fill="#7A7A7A">Students see nothing until then.</text>
+  <!-- Friday sequence -->
+  <text x="48" y="736" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" font-weight="700" fill="#7A7A7A" letter-spacing="1.6">FRIDAY  ·  TWO-PHASE DRAW</text>
 
-    <rect x="384" y="432" width="312" height="72" rx="4" fill="#F8F8F8"/>
-    <text x="404" y="462" font-size="15" font-weight="600" fill="#2D2D2D">One open prize at a time</text>
-    <text x="404" y="484" font-size="13" fill="#7A7A7A">Friday is a line, not a pile.</text>
+  <rect x="48" y="752" width="300" height="88" fill="#fff" stroke="#2D2D2D" stroke-width="1.5"/>
+  <text x="64" y="782" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" font-weight="700" fill="#2D2D2D">1  start_prize</text>
+  <text x="64" y="804" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" fill="#7A7A7A">one draft becomes open</text>
+  <text x="64" y="824" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" fill="#7A7A7A">students can enter tickets</text>
 
-    <rect x="712" y="432" width="312" height="72" rx="4" fill="#F8F8F8"/>
-    <text x="732" y="462" font-size="15" font-weight="600" fill="#2D2D2D">Ledger is append-only</text>
-    <text x="732" y="484" font-size="13" fill="#7A7A7A">Balances are a view, not edits.</text>
-  </g>
+  <line x1="348" y1="796" x2="388" y2="796" stroke="#2D2D2D" stroke-width="1.5"/>
+  <polygon points="380,790 392,796 380,802" fill="#2D2D2D"/>
 
-  <text x="56" y="560" font-family="Montserrat, Helvetica, Arial, sans-serif" font-size="13" fill="#7A7A7A">test@alpha.school � test1@alpha.school � guide passcode 2468</text>
-  <text x="56" y="588" font-family="Montserrat, Helvetica, Arial, sans-serif" font-size="13" fill="#7A7A7A">Editable board: draw.insforge.site � colors never use page blue for the first slice</text>
+  <rect x="392" y="752" width="300" height="88" fill="#fff" stroke="#2D2D2D" stroke-width="1.5"/>
+  <text x="408" y="782" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" font-weight="700" fill="#2D2D2D">2  enter_prize</text>
+  <text x="408" y="804" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" fill="#7A7A7A">ledger + entries</text>
+  <text x="408" y="824" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" fill="#7A7A7A">pie rebuilds on tick</text>
+
+  <line x1="692" y1="796" x2="732" y2="796" stroke="#0000EF" stroke-width="1.5"/>
+  <polygon points="724,790 736,796 724,802" fill="#0000EF"/>
+
+  <rect x="736" y="752" width="300" height="88" fill="#0000EF"/>
+  <text x="752" y="782" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" font-weight="700" fill="#FFB81C">3  begin_draw</text>
+  <text x="752" y="804" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" fill="#ffffff">winner written, status spinning</text>
+  <text x="752" y="824" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" fill="#ffffff">RLS: staff only</text>
+
+  <line x1="1036" y1="796" x2="1076" y2="796" stroke="#0000EF" stroke-width="1.5"/>
+  <polygon points="1068,790 1080,796 1068,802" fill="#0000EF"/>
+
+  <rect x="1080" y="752" width="312" height="88" fill="#fff" stroke="#0000EF" stroke-width="1.5"/>
+  <text x="1096" y="782" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" font-weight="700" fill="#0000EF">4  complete_draw</text>
+  <text x="1096" y="804" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" fill="#2D2D2D">award + publish</text>
+  <text x="1096" y="824" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" fill="#2D2D2D">phones: winner popup · board stays</text>
+
+  <line x1="48" y1="872" x2="48" y2="910" stroke="#7A7A7A" stroke-width="1" stroke-dasharray="4 4"/>
+  <line x1="48" y1="910" x2="1392" y2="910" stroke="#7A7A7A" stroke-width="1" stroke-dasharray="4 4"/>
+  <text x="60" y="900" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#7A7A7A">realtime  raffle:hall</text>
+  <text x="280" y="900" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#7A7A7A">prize_opened  hall_changed  draw_started  draw_changed</text>
+  <text x="980" y="900" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#7A7A7A">+ 1s tick while tab visible</text>
+
+  <text x="48" y="952" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#7A7A7A">solid = request   gold box = hidden from students   dashed = fan-out</text>
 </svg>

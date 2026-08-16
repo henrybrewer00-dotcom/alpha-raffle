@@ -6,7 +6,7 @@ One prize at a time. Students put tickets in. The pie fills live. Spin, and ever
 
 **Live site:** [ak29gamq.insforge.site](https://ak29gamq.insforge.site)
 
-![Friday raffle](docs/diagrams/friday-raffle.png)
+![System diagram](docs/diagrams/friday-raffle.png)
 
 ## Sign in
 
@@ -40,7 +40,7 @@ Full steps: [docs/MIGRATE.md](docs/MIGRATE.md)
 Colors and type: [docs/STYLE.md](docs/STYLE.md)  
 For coding agents: [AGENTS.md](AGENTS.md)
 
-The diagram above also lives as an editable board: [friday-flow](https://draw.insforge.site/#p=alpha-raffle/friday-flow).
+Source: [docs/diagrams/friday-raffle.svg](docs/diagrams/friday-raffle.svg). Editable copy: [friday-flow](https://draw.insforge.site/#p=alpha-raffle/friday-flow).
 
 ## License
 
